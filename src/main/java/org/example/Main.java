@@ -1,6 +1,9 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -59,16 +62,45 @@ public class Main {
         }
     }
 
-    public static void leerDesdeURL(String urlArchivo) {
-        try (BufferedReader lector = new BufferedReader(new InputStreamReader(new URL(urlArchivo).openStream()))) {
+    public static void leerDesdeURL(String urlArchivo) throws IOException {
 
+        URL url = new URL(urlArchivo);
+        InputStreamReader isr = new InputStreamReader(url.openStream());
+        BufferedReader lector = new BufferedReader( isr);
+
+        String linea;
+        while ((linea = lector.readLine()) != null) {
+            System.out.println(linea);
+        }
+
+    }
+
+    public static void leerArchivoCSV(String nombreArchivo) throws IOException {
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
             while ((linea = lector.readLine()) != null) {
-                System.out.println(linea);
+                String[] valores = linea.split(",");
+                for (String valor : valores) {
+                    // To do...
+                }
             }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo desde la URL: " + e.getMessage());
         }
+    }
+
+    public static void leerArchivoJSON(String nombreArchivo) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // Lee el archivo JSON y lo convierte en un objeto de la clase Juego
+            Juego juego = objectMapper.readValue(new File(nombreArchivo), Juego.class);
+            // List<Persona> personas = objectMapper.readValue(new File(nombreArchivo), new TypeReference<List<Persona>>() {});
+
+            System.out.println(juego); // Imprime el objeto
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo JSON: " + e.getMessage());
+        }
+
     }
 
 }

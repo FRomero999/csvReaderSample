@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Main {
@@ -9,6 +10,8 @@ public class Main {
         System.out.println("Hello world!");
         var juegos = readFromFile("videojuegos_retro.csv");
         juegos.forEach(System.out::println);
+
+        leerDesdeURL("https://cesurformacion.com");
     }
 
     private static ArrayList<Juego> readFromFile(String filename) {
@@ -55,4 +58,17 @@ public class Main {
             System.err.println("Error al copiar el archivo: " + e.getMessage());
         }
     }
+
+    public static void leerDesdeURL(String urlArchivo) {
+        try (BufferedReader lector = new BufferedReader(new InputStreamReader(new URL(urlArchivo).openStream()))) {
+
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                System.out.println(linea);
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo desde la URL: " + e.getMessage());
+        }
+    }
+
 }

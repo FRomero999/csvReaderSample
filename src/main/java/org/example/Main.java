@@ -1,9 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Main {
@@ -42,5 +39,20 @@ public class Main {
             throw new RuntimeException(e);
         }
         return juegos;
+    }
+
+    public static void copiarArchivo(String archivoEntrada, String archivoSalida) {
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivoEntrada));
+             BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoSalida))) {
+
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                escritor.write(linea);
+                escritor.newLine(); // Añade un salto de línea después de cada línea copiada
+            }
+            System.out.println("Archivo copiado con éxito.");
+        } catch (IOException e) {
+            System.err.println("Error al copiar el archivo: " + e.getMessage());
+        }
     }
 }
